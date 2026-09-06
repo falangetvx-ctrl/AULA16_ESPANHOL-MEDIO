@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Falange | La familia de Elia</title>
+  <style>
+    /* ===== PADRÃO FALANGE: leve, responsivo e direto ===== */
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:#f4f7fb;color:#1f2937;padding:18px}
+    .app{max-width:1180px;margin:auto;background:white;border-radius:18px;padding:18px;box-shadow:0 8px 25px #0002}
+    h1{text-align:center;color:#0f766e;margin-bottom:8px}
+    .info{text-align:center;margin-bottom:14px;font-size:1.05rem}
+    audio{width:100%;margin:10px 0 18px}
+    .jogo{display:grid;grid-template-columns:1.3fr .9fr;gap:18px;align-items:start}
+    .foto{width:100%;border-radius:14px;border:3px solid #e5e7eb;background:#fff}
+    .respostas{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .item{display:flex;align-items:center;gap:8px;background:#eef2ff;border-radius:12px;padding:8px}
+    .num{min-width:38px;height:38px;border-radius:50%;background:#f97316;color:white;display:grid;place-items:center;font-weight:bold;font-size:1.1rem}
+    select{width:100%;padding:12px;border:2px solid #c7d2fe;border-radius:10px;font-size:1rem;font-weight:bold;text-align:center;background:white;cursor:pointer}
+    select:focus{outline:none;border-color:#0f766e;background:#ecfdf5}
+    .botoes{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+    button{border:0;border-radius:12px;padding:12px 22px;font-weight:bold;cursor:pointer;font-size:1rem}
+    .ok{background:#16a34a;color:white}.limpar{background:#ef4444;color:white}
+    .msg{text-align:center;margin-top:12px;font-weight:bold;min-height:24px}
+    @media(max-width:850px){.jogo{grid-template-columns:1fr}.respostas{grid-template-columns:1fr}body{padding:8px}.app{padding:12px}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <h1>Escucha y completa la familia</h1>
+    <p class="info">Escucha el audio, observa la imagen y elige los nombres correctos.</p>
+
+    <!-- ÁUDIO DA ATIVIDADE -->
+    <audio controls src="audio.mp3"></audio>
+
+    <section class="jogo">
+      <!-- IMAGEM PRINCIPAL -->
+      <img class="foto" src="familia.png" alt="Familia numerada">
+
+      <!-- CAMPOS DE RESPOSTA -->
+      <div class="respostas" id="respostas"></div>
+    </section>
+
+    <!-- BOTÕES -->
+    <div class="botoes">
+      <button class="ok" onclick="verificar()">Comprobar</button>
+      <button class="limpar" onclick="reiniciar('')">Limpiar</button>
+    </div>
+    <p class="msg" id="msg"></p>
+  </main>
+
+  <script>
+    // ===== GABARITO DA ATIVIDADE =====
+    const nomes = ['Norman','Olaya','Iris','Frida','Quetzal','Roberto','Líam','Elia','Anna','Bea','Conrad','Vega','Alondra','Carlos','Emma','Lander'];
+
+    // Cria automaticamente as 16 caixas com as opções de nomes.
+    const area = document.getElementById('respostas');
+    const opcoes = nomes.map(n=>`<option value="${n}">${n}</option>`).join('');
+    nomes.forEach((_,i)=>{
+      area.innerHTML += `<label class="item"><span class="num">${i+1}</span><select id="r${i}"><option value="">Nombre ${i+1}</option>${opcoes}</select></label>`;
+    });
+
+    // Normaliza acentos e espaços para facilitar a correção.
+    const normalizar = t => t.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+    // Verifica: se houver erro, apaga tudo e reinicia.
+    function verificar(){
+      for(let i=0;i<nomes.length;i++){
+        if(normalizar(document.getElementById('r'+i).value) !== normalizar(nomes[i])){
+          reiniciar('❌ Hay un error. Inténtalo otra vez.');
+          return;
+        }
+      }
+      document.getElementById('msg').textContent = '✅ ¡Muy bien! Todas las respuestas están correctas.';
+    }
+
+    // Limpa todos os campos.
+    function reiniciar(texto){
+      document.querySelectorAll('select').forEach(c=>c.value='');
+      document.getElementById('msg').textContent = texto;
+      document.getElementById('r0').focus();
+    }
+  </script>
+</body>
+</html>

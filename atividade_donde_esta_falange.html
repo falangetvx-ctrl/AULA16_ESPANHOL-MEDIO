@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Falange | ¿Dónde está?</title>
+
+  <style>
+    /* ======= CONFIGURAÇÃO VISUAL PADRÃO FALANGE ======= */
+    :root{
+      --vermelho:#d71920;
+      --azul:#1976d2;
+      --verde:#1fa463;
+      --escuro:#1f2937;
+      --fundo:#f3f6fb;
+      --branco:#ffffff;
+      --linha:#d9e2ef;
+    }
+
+    /* ======= BASE DA PÁGINA ======= */
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--fundo);
+      color:var(--escuro);
+    }
+
+    /* ======= CONTAINER PRINCIPAL ======= */
+    .pagina{
+      width:min(1100px,96vw);
+      margin:18px auto;
+    }
+
+    /* ======= CABEÇALHO ======= */
+    header{
+      background:var(--branco);
+      border:2px solid var(--linha);
+      border-radius:18px;
+      padding:16px;
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:0 6px 18px #0001;
+    }
+
+    .marca{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .logo{
+      width:54px;
+      height:54px;
+      border-radius:14px;
+      background:var(--vermelho);
+      color:white;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      font-size:22px;
+    }
+
+    h1{margin:0;font-size:clamp(1.3rem,3vw,2rem)}
+    p{margin:6px 0 0;line-height:1.45}
+
+    .placar{
+      font-weight:800;
+      background:#eef5ff;
+      border:1px solid #cfe0ff;
+      border-radius:999px;
+      padding:10px 14px;
+      white-space:nowrap;
+    }
+
+    /* ======= LAYOUT DO JOGO ======= */
+    main{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .cartao{
+      background:var(--branco);
+      border:2px solid var(--linha);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 6px 18px #0001;
+    }
+
+    /* ======= IMAGEM DA ATIVIDADE ======= */
+    .imagem-jogo{
+      width:100%;
+      border-radius:14px;
+      border:2px solid var(--linha);
+      display:block;
+    }
+
+    /* ======= PERGUNTA E ALTERNATIVAS ======= */
+    .numero{
+      color:var(--vermelho);
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .pergunta{
+      font-size:1.35rem;
+      font-weight:900;
+      margin-bottom:14px;
+    }
+
+    .opcao{
+      width:100%;
+      text-align:left;
+      border:2px solid var(--linha);
+      background:#f7faff;
+      border-radius:14px;
+      padding:14px;
+      margin:8px 0;
+      font-size:1rem;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .opcao:hover{border-color:var(--azul);background:#eef6ff}
+    .opcao.certa{background:#e9fff3;border-color:var(--verde)}
+    .opcao.errada{background:#fff0f0;border-color:var(--vermelho)}
+
+    .mensagem{
+      min-height:30px;
+      margin-top:12px;
+      font-weight:900;
+    }
+
+    .botoes{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    button.controle{
+      border:0;
+      border-radius:12px;
+      padding:12px 14px;
+      font-weight:900;
+      cursor:pointer;
+      background:var(--escuro);
+      color:white;
+    }
+
+    button.controle.vermelho{background:var(--vermelho)}
+
+    /* ======= FINALIZAÇÃO ======= */
+    .final{
+      display:none;
+      margin-top:14px;
+      padding:14px;
+      border-radius:14px;
+      background:#e9fff3;
+      border:2px solid var(--verde);
+      font-weight:900;
+    }
+
+    /* ======= RESPONSIVO ======= */
+    @media(max-width:850px){
+      header{align-items:flex-start;flex-direction:column}
+      main{grid-template-columns:1fr}
+      .placar{white-space:normal}
+    }
+  </style>
+</head>
+<body>
+  <div class="pagina">
+
+    <!-- ======= CABEÇALHO DA ATIVIDADE ======= -->
+    <header>
+      <div class="marca">
+        <div class="logo">F</div>
+        <div>
+          <h1>¿Dónde está?</h1>
+          <p>Observa la imagen y escoge la opción correcta.</p>
+        </div>
+      </div>
+      <div class="placar" id="placar">Pregunta 1 de 6</div>
+    </header>
+
+    <main>
+      <!-- ======= IMAGEM USADA NO JOGO ======= -->
+      <section class="cartao">
+        <img class="imagem-jogo" src="dondeesta.png" alt="Imagem com casa, pájaro, paraguas, nube, avión, árbol, coche, Paco, tienda, tarta, gato y basura">
+      </section>
+
+      <!-- ======= ÁREA DAS PERGUNTAS ======= -->
+      <section class="cartao">
+        <div class="numero" id="numero"></div>
+        <div class="pergunta" id="pergunta"></div>
+        <div id="opcoes"></div>
+        <div class="mensagem" id="mensagem"></div>
+
+        <div class="botoes">
+          <button class="controle" onclick="iniciarJogo()">Reiniciar</button>
+          <button class="controle vermelho" onclick="window.print()">Imprimir</button>
+        </div>
+
+        <div class="final" id="final">Parabéns! Você concluiu a atividade.</div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    /* =====================================================
+       BANCO DE PERGUNTAS
+       correta = número da alternativa correta, começando em 0
+       ===================================================== */
+    const perguntas = [
+      {
+        pergunta:'¿Dónde está el pájaro?',
+        opcoes:['Está debajo del paraguas.','Está sobre el paraguas.','Está enfrente de la casa de Ana.'],
+        correta:0
+      },
+      {
+        pergunta:'¿Dónde está la tienda?',
+        opcoes:['Está detrás del árbol.','Está debajo de Paco.','Está enfrente de la casa de Ana.'],
+        correta:2
+      },
+      {
+        pergunta:'¿Dónde está el avión?',
+        opcoes:['Está detrás de las nubes.','Está a la izquierda de las nubes.','Está debajo de las nubes.'],
+        correta:0
+      },
+      {
+        pergunta:'¿Dónde está la tarta?',
+        opcoes:['Está cerca de la tienda.','Está sobre la tienda.','Está dentro de la tienda.'],
+        correta:2
+      },
+      {
+        pergunta:'¿Dónde está la basura?',
+        opcoes:['Está dentro de la casa.','Está junto a la casa.','Está sobre la casa.'],
+        correta:1
+      },
+      {
+        pergunta:'¿Dónde está Paco?',
+        opcoes:['Está a la izquierda del árbol.','Está entre el árbol y la tienda.','Está delante del coche.'],
+        correta:1
+      }
+    ];
+
+    /* ======= VARIÁVEL QUE GUARDA A PERGUNTA ATUAL ======= */
+    let atual = 0;
+
+    /* ======= COMEÇA OU RECOMEÇA O JOGO ======= */
+    function iniciarJogo(){
+      atual = 0;
+      document.getElementById('final').style.display = 'none';
+      mostrarPergunta();
+    }
+
+    /* ======= MOSTRA A PERGUNTA NA TELA ======= */
+    function mostrarPergunta(){
+      const q = perguntas[atual];
+      document.getElementById('placar').textContent = `Pregunta ${atual + 1} de ${perguntas.length}`;
+      document.getElementById('numero').textContent = `${atual + 1} - Escoge la opción correcta`;
+      document.getElementById('pergunta').textContent = q.pergunta;
+      document.getElementById('mensagem').textContent = '';
+
+      const caixa = document.getElementById('opcoes');
+      caixa.innerHTML = '';
+
+      q.opcoes.forEach((texto, indice) => {
+        const botao = document.createElement('button');
+        botao.className = 'opcao';
+        botao.textContent = texto;
+        botao.onclick = () => responder(botao, indice);
+        caixa.appendChild(botao);
+      });
+    }
+
+    /* ======= CONFERE A RESPOSTA DO ALUNO ======= */
+    function responder(botao, indice){
+      const q = perguntas[atual];
+      const mensagem = document.getElementById('mensagem');
+
+      if(indice === q.correta){
+        botao.classList.add('certa');
+        mensagem.textContent = 'Muito bem!';
+
+        setTimeout(() => {
+          atual++;
+          if(atual < perguntas.length){
+            mostrarPergunta();
+          }else{
+            document.getElementById('opcoes').innerHTML = '';
+            document.getElementById('pergunta').textContent = 'Atividade concluída!';
+            document.getElementById('numero').textContent = '';
+            document.getElementById('placar').textContent = 'Finalizado';
+            document.getElementById('final').style.display = 'block';
+          }
+        }, 600);
+      }else{
+        botao.classList.add('errada');
+        mensagem.textContent = 'Errou! O jogo vai reiniciar.';
+        setTimeout(iniciarJogo, 900);
+      }
+    }
+
+    /* ======= INICIA AUTOMATICAMENTE ======= */
+    iniciarJogo();
+  </script>
+</body>
+</html>

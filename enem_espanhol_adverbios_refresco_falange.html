@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ENEM Espanhol — Advérbios | Atividade Interativa Falange</title>
+
+  <style>
+    /* =========================================================
+       ATIVIDADE INTERATIVA FALANGE
+       ENEM ESPANHOL — ADVÉRBIOS E LOCUÇÕES ADVERBIAIS
+       Base: ENEM 2021 — Questão 05 — Espanhol
+       ========================================================= */
+
+    :root{
+      --paper:#f3f4df;
+      --blue:#3aa0e6;
+      --violet:#9b59b6;
+      --red:#d94b3a;
+      --green:#2ecc71;
+      --yellow:#f4c542;
+      --ink:#111;
+      --soft:#fffdf0;
+      --shadow:0 10px 30px rgba(0,0,0,.18);
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(135deg,#e7f3ff,#fff6d6);
+      color:var(--ink);
+    }
+
+    .wrap{
+      width:min(1200px, 96vw);
+      margin:24px auto;
+      background:var(--paper);
+      border:4px solid var(--ink);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    header{
+      padding:18px 24px;
+      background:#111;
+      color:white;
+      text-align:center;
+      border-bottom:5px solid var(--yellow);
+    }
+
+    header h1{
+      margin:0;
+      font-size:clamp(22px, 4vw, 40px);
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+
+    header p{
+      margin:8px 0 0;
+      font-size:clamp(14px, 2vw, 18px);
+      color:#f4f4f4;
+    }
+
+    .main{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      padding:20px;
+    }
+
+    .card{
+      background:var(--soft);
+      border:3px solid #222;
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 5px 0 rgba(0,0,0,.15);
+    }
+
+    .card h2{
+      margin:0 0 12px;
+      font-size:24px;
+      color:#222;
+    }
+
+    .notice{
+      padding:12px;
+      border:2px dashed var(--violet);
+      border-radius:12px;
+      background:#fff;
+      font-weight:700;
+      margin-bottom:14px;
+    }
+
+    .texto{
+      font-size:18.5px;
+      line-height:1.65;
+      text-align:justify;
+    }
+
+    .texto span.mark{
+      background:#fff2a8;
+      border-bottom:3px solid var(--yellow);
+      padding:0 4px;
+      border-radius:5px;
+      font-weight:700;
+    }
+
+    .source{
+      margin-top:10px;
+      font-size:13px;
+      background:#fff;
+      padding:8px;
+      border-radius:10px;
+      border:2px solid #ddd;
+    }
+
+    .hotspots{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .hotspot{
+      border:3px solid #111;
+      border-radius:16px;
+      padding:14px;
+      background:white;
+      cursor:pointer;
+      transition:.2s;
+      min-height:110px;
+    }
+
+    .hotspot:hover{
+      transform:translateY(-3px);
+      box-shadow:0 8px 0 rgba(0,0,0,.2);
+      background:#fff7cc;
+    }
+
+    .hotspot strong{
+      display:block;
+      font-size:18px;
+      margin-bottom:6px;
+      color:#111;
+    }
+
+    .hotspot small{
+      font-size:14px;
+      color:#333;
+    }
+
+    .question{
+      font-size:18.5px;
+      line-height:1.45;
+      background:#fff;
+      border:3px solid var(--blue);
+      border-radius:14px;
+      padding:14px;
+      margin-bottom:14px;
+    }
+
+    .mini-box{
+      background:#f7fbff;
+      border:2px solid #9fd5ff;
+      border-radius:12px;
+      padding:12px;
+      margin-bottom:14px;
+      font-size:16px;
+      line-height:1.45;
+    }
+
+    .options{
+      display:grid;
+      gap:10px;
+    }
+
+    .option{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:13px;
+      background:white;
+      border:3px solid #222;
+      border-radius:14px;
+      cursor:pointer;
+      transition:.15s;
+      font-size:16px;
+      line-height:1.35;
+    }
+
+    .option:hover{
+      background:#edf8ff;
+      transform:scale(1.01);
+    }
+
+    .letter{
+      min-width:34px;
+      height:34px;
+      border-radius:50%;
+      background:#111;
+      color:white;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+    }
+
+    .controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    button{
+      border:3px solid #111;
+      border-radius:12px;
+      padding:12px 16px;
+      font-weight:900;
+      cursor:pointer;
+      background:var(--yellow);
+      box-shadow:0 4px 0 #111;
+      font-size:15px;
+    }
+
+    button:active{
+      transform:translateY(3px);
+      box-shadow:0 1px 0 #111;
+    }
+
+    .progress{
+      margin-top:14px;
+      padding:12px;
+      border-radius:12px;
+      background:#eafbea;
+      border:2px solid var(--green);
+      font-weight:800;
+    }
+
+    .modal-bg{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.72);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:50;
+      padding:20px;
+    }
+
+    .modal{
+      width:min(720px, 94vw);
+      background:#fffdf0;
+      border:5px solid #111;
+      border-radius:20px;
+      padding:22px;
+      box-shadow:var(--shadow);
+      animation:pop .18s ease-out;
+    }
+
+    @keyframes pop{
+      from{ transform:scale(.92); opacity:.4; }
+      to{ transform:scale(1); opacity:1; }
+    }
+
+    .modal h3{
+      margin:0 0 10px;
+      font-size:26px;
+      color:#111;
+    }
+
+    .modal p{
+      font-size:18px;
+      line-height:1.55;
+      margin:8px 0;
+    }
+
+    .modal .tip{
+      background:#eef8ff;
+      border-left:8px solid var(--blue);
+      padding:12px;
+      border-radius:8px;
+      font-weight:700;
+    }
+
+    .final{
+      display:none;
+      margin-top:14px;
+      padding:14px;
+      border:3px solid var(--green);
+      background:#eaffea;
+      border-radius:14px;
+      font-weight:900;
+      font-size:18px;
+    }
+
+    footer{
+      padding:12px 20px;
+      background:#111;
+      color:white;
+      text-align:center;
+      font-size:14px;
+    }
+
+    @media(max-width:900px){
+      .main{ grid-template-columns:1fr; padding:12px; }
+      .hotspots{ grid-template-columns:1fr; }
+      .texto{ font-size:17px; }
+      .wrap{ margin:8px auto; width:98vw; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <h1>ENEM Espanhol — Advérbios</h1>
+      <p>Atividade interativa com questão oficial, pistas e interpretação textual</p>
+    </header>
+
+    <main class="main">
+      <section class="card">
+        <h2>1. Lee el texto con atención</h2>
+
+        <div class="notice">
+          Antes de marcar a alternativa, observe os advérbios e locuções adverbiais destacados. Eles ajudam a entender frequência, intensidade e tempo no texto.
+        </div>
+
+        <article class="texto">
+          <p><strong>Los riesgos de tomarse un refresco al día</strong></p>
+
+          <p>
+            ¿Agua o burbujas? En la próxima comida, piénselo
+            <span class="mark">dos veces</span> antes de elegir. Según las investigaciones, tomar un solo refresco
+            <span class="mark">al día</span> perjudica la salud de su corazón.
+          </p>
+
+          <p>
+            Y no crea que eligiendo una bebida baja en calorías podrá solucionar el problema.
+            “Consumir uno o más refrescos <span class="mark">al día</span> está asociado con un incremento del riesgo de desarrollar síndrome metabólico
+            (un conjunto de factores de riesgo para el corazón, como hipertensión u obesidad abdominal),
+            independientemente de si la bebida es normal o light”, explican los investigadores.
+          </p>
+
+          <p>
+            El consumo de este tipo de bebidas ha aumentado
+            <span class="mark">considerablemente</span> en los últimos años y, aunque se ha asociado este incremento con la epidemia de obesidad y diabetes que vivimos,
+            <span class="mark">todavía</span> es mucho lo que se desconoce sobre su efecto en la salud cardiovascular.
+          </p>
+        </article>
+
+        <div class="source">
+          Fonte didática: questão oficial do ENEM 2021, prova de Linguagens, opção Espanhol, texto “Los riesgos de tomarse un refresco al día”.
+        </div>
+
+        <div class="hotspots">
+          <div class="hotspot" onclick="openModal('aldia')">
+            <strong>🕒 Pista 1 — “al día”</strong>
+            <small>Veja como a locução marca frequência.</small>
+          </div>
+
+          <div class="hotspot" onclick="openModal('considerablemente')">
+            <strong>📈 Pista 2 — “considerablemente”</strong>
+            <small>Entenda a ideia de intensidade.</small>
+          </div>
+
+          <div class="hotspot" onclick="openModal('todavia')">
+            <strong>⏳ Pista 3 — “todavía”</strong>
+            <small>Observe a ideia de algo que continua no presente.</small>
+          </div>
+
+          <div class="hotspot" onclick="openModal('enem')">
+            <strong>🎯 Pista 4 — Estratégia ENEM</strong>
+            <small>Relacione gramática e interpretação.</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2. Marque a alternativa correta</h2>
+
+        <div class="mini-box">
+          <strong>Foco da aula:</strong> os advérbios e locuções adverbiais ajudam a indicar <strong>com que frequência</strong>, <strong>com que intensidade</strong> e <strong>em que momento</strong> algo acontece.
+        </div>
+
+        <div class="question">
+          O consumo de refrigerante tem aumentado consideravelmente nos últimos anos, assim como as pesquisas sobre as consequências de seu consumo diário. De acordo com o texto, pesquisas comprovam que o refrigerante:
+        </div>
+
+        <div class="options">
+          <div class="option" onclick="checkAnswer('A')">
+            <span class="letter">A</span>
+            <span>traz riscos, se consumido em qualquer quantidade.</span>
+          </div>
+
+          <div class="option" onclick="checkAnswer('B')">
+            <span class="letter">B</span>
+            <span>constitui-se inofensivo, se ingerido uma vez ao dia.</span>
+          </div>
+
+          <div class="option" onclick="checkAnswer('C')">
+            <span class="letter">C</span>
+            <span>oferece perigo, se bebido juntamente com água.</span>
+          </div>
+
+          <div class="option" onclick="checkAnswer('D')">
+            <span class="letter">D</span>
+            <span>torna-se aconselhável, se usado na versão light.</span>
+          </div>
+
+          <div class="option" onclick="checkAnswer('E')">
+            <span class="letter">E</span>
+            <span>causa distúrbios, se tomado após as refeições.</span>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button onclick="resetActivity()">🔄 Reiniciar atividade</button>
+          <button onclick="openModal('semResposta')">💡 Quero uma pista final</button>
+        </div>
+
+        <div class="progress" id="progress">
+          Status: leia o texto, consulte as pistas e escolha uma alternativa.
+        </div>
+
+        <div class="final" id="finalBox">
+          ✅ Parabéns! Você interpretou corretamente o texto e percebeu a função dos advérbios.
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Material didático interativo — Padrão Falange | ENEM Espanhol — Advérbios e Locuções Adverbiais
+    </footer>
+  </div>
+
+  <div class="modal-bg" id="modalBg">
+    <div class="modal">
+      <h3 id="modalTitle">Título</h3>
+      <p id="modalText">Texto</p>
+      <div class="tip" id="modalTip">Dica</div>
+      <div class="controls">
+        <button onclick="closeModal()">Fechar pista</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modalBg = document.getElementById("modalBg");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalText = document.getElementById("modalText");
+    const modalTip = document.getElementById("modalTip");
+    const progress = document.getElementById("progress");
+    const finalBox = document.getElementById("finalBox");
+
+    const pistas = {
+      aldia:{
+        title:"🕒 Locução adverbial: “al día”",
+        text:"A expressão “al día” indica frequência: algo que acontece ou é consumido diariamente.",
+        tip:"No texto, o risco aparece mesmo quando se fala de um consumo diário: um ou mais refrigerantes por dia."
+      },
+      considerablemente:{
+        title:"📈 Advérbio: “considerablemente”",
+        text:"“Considerablemente” é um advérbio de intensidade. Ele mostra que o aumento do consumo não foi pequeno, mas significativo.",
+        tip:"Esse advérbio reforça a preocupação do texto com o crescimento do consumo de refrigerantes."
+      },
+      todavia:{
+        title:"⏳ Advérbio: “todavía”",
+        text:"“Todavía” significa “ainda”. No texto, indica que ainda há muito desconhecimento sobre os efeitos cardiovasculares do refrigerante.",
+        tip:"O texto não diz que o refrigerante é seguro; pelo contrário, aponta riscos já associados e dúvidas que ainda persistem."
+      },
+      enem:{
+        title:"🎯 Estratégia ENEM",
+        text:"O ENEM costuma cobrar a interpretação do texto. A gramática ajuda a compreender melhor a mensagem, mas a resposta depende da ideia central.",
+        tip:"Elimine alternativas que dizem que o refrigerante é inofensivo, aconselhável ou perigoso apenas em situações não citadas."
+      },
+      semResposta:{
+        title:"💡 Pista final",
+        text:"O texto afirma que um ou mais refrigerantes por dia estão associados ao aumento do risco de síndrome metabólica, independentemente de a bebida ser normal ou light.",
+        tip:"A alternativa correta precisa mostrar que o consumo apresenta risco, mesmo em quantidade aparentemente pequena."
+      },
+      erro:{
+        title:"❌ Resposta incorreta",
+        text:"Essa alternativa não corresponde à informação principal do texto. A atividade será reiniciada para você reler com atenção.",
+        tip:"Volte aos trechos com “al día”, “considerablemente” e “todavía”. Eles ajudam a entender o sentido do texto."
+      }
+    };
+
+    function openModal(tipo){
+      const p = pistas[tipo];
+      modalTitle.textContent = p.title;
+      modalText.textContent = p.text;
+      modalTip.textContent = p.tip;
+      modalBg.style.display = "flex";
+    }
+
+    function closeModal(){
+      modalBg.style.display = "none";
+    }
+
+    function checkAnswer(letter){
+      if(letter === "A"){
+        progress.textContent = "Status: resposta correta. Atividade concluída.";
+        finalBox.style.display = "block";
+        openSuccessModal();
+      }else{
+        openModal("erro");
+        setTimeout(() => {
+          resetActivity();
+        }, 2600);
+      }
+    }
+
+    function openSuccessModal(){
+      modalTitle.textContent = "✅ Muito bem!";
+      modalText.textContent = "Você percebeu que o texto relaciona o consumo diário de refrigerante ao aumento de riscos para a saúde.";
+      modalTip.textContent = "Os advérbios e locuções adverbiais ajudam a reforçar frequência, intensidade e continuidade da informação.";
+      modalBg.style.display = "flex";
+    }
+
+    function resetActivity(){
+      finalBox.style.display = "none";
+      progress.textContent = "Status: atividade reiniciada. Leia o texto e consulte as pistas novamente.";
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    modalBg.addEventListener("click", function(e){
+      if(e.target === modalBg){
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>

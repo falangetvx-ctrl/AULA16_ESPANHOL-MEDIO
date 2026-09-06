@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Actividad Interactiva — Las preposiciones y los adverbios de lugar</title>
+  <style>
+    :root{
+      --red:#e42313; --blue:#0b78c8; --dark:#1e293b; --muted:#64748b; --bg:#f6f7fb; --card:#ffffff;
+      --ok:#16a34a; --bad:#dc2626; --yellow:#ffd84d; --orange:#f36c21;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial, Helvetica, sans-serif;background:var(--bg);color:var(--dark)}
+    .topbar{background:linear-gradient(135deg,var(--orange),#ff9b2f);color:white;text-align:center;padding:24px 12px 18px;border-bottom:8px solid var(--yellow);box-shadow:0 6px 20px rgba(0,0,0,.12)}
+    .topbar h1{margin:0;font-size:clamp(26px,4vw,54px);letter-spacing:4px;text-transform:uppercase;text-shadow:2px 3px 0 rgba(0,0,0,.18)}
+    .topbar p{margin:10px 0 0;font-size:clamp(14px,2vw,20px);font-weight:700}
+    .wrap{max-width:1180px;margin:22px auto;padding:0 14px}
+    .painel{display:grid;grid-template-columns:1fr 310px;gap:18px;align-items:start}
+    .video-card,.side-card{background:var(--card);border-radius:18px;box-shadow:0 10px 28px rgba(15,23,42,.12);overflow:hidden;border:1px solid #e2e8f0}
+    .video-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#111827;color:white;font-weight:800}
+    .badge{background:var(--red);color:white;border-radius:999px;padding:7px 12px;font-size:14px}
+    .video-box{position:relative;background:#fff;min-height:260px}
+    video{width:100%;display:block;background:#fff;max-height:68vh}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;padding:14px;background:#f8fafc;border-top:1px solid #e2e8f0}
+    button{border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;font-size:15px;transition:.2s transform,.2s filter}
+    button:hover{transform:translateY(-1px);filter:brightness(.98)}
+    .btn-primary{background:var(--blue);color:#fff}.btn-dark{background:#111827;color:#fff}.btn-soft{background:#e2e8f0;color:#111827}
+    .side-card{padding:18px}.side-card h2{margin:0 0 12px;font-size:24px}.meta{display:grid;gap:10px;margin-top:14px}.meta div{background:#f1f5f9;border-radius:14px;padding:12px;font-weight:700}.bar{height:16px;background:#e2e8f0;border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--ok));transition:.3s}
+    .lista{padding-left:0;list-style:none;display:grid;gap:8px}.lista li{display:flex;gap:8px;align-items:center;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:10px;font-weight:700}.num{background:var(--red);color:white;border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex:0 0 auto}
+    .cat-laugh-box{text-align:center;margin:16px 0 4px;background:#fff7ed;border:1px solid #fed7aa;border-radius:16px;padding:12px}.cat-laugh-img{width:100%;max-width:250px;border-radius:15px;box-shadow:0 4px 12px rgba(0,0,0,.25);display:block;margin:0 auto}.cat-laugh-text{font-weight:800;color:#9a3412;margin:10px 0 0;font-size:14px}
+    .modal{position:fixed;inset:0;background:rgba(15,23,42,.64);display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modal.show{display:flex}.quiz{width:min(560px,100%);background:white;border-radius:22px;box-shadow:0 20px 60px rgba(0,0,0,.35);padding:24px;border:5px solid #fff}.quiz h3{font-size:clamp(24px,4vw,34px);margin:0 0 14px}.question-count{display:inline-block;background:var(--red);color:white;border-radius:999px;padding:7px 12px;font-weight:900;margin-bottom:10px}.opts{display:grid;gap:12px}.opt{width:100%;text-align:left;background:#eef2f7;color:#172033;border:2px solid transparent;border-radius:14px;padding:15px 16px;font-size:20px}.opt:hover{border-color:#93c5fd;background:#e0f2fe}.feedback{display:none;margin-top:14px;border-radius:14px;padding:14px;font-weight:900}.feedback.ok{display:block;background:#dcfce7;color:#166534}.feedback.bad{display:block;background:#fee2e2;color:#991b1b}
+    .cert{display:none;margin-top:18px;background:#ecfdf5;border:2px dashed var(--ok);border-radius:18px;padding:18px;text-align:center}.cert h2{color:var(--ok);margin-top:0}.student{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.student input{flex:1;min-width:180px;border:2px solid #cbd5e1;border-radius:12px;padding:12px;font-size:16px}
+    .footer{text-align:center;color:#64748b;padding:14px;font-weight:700}
+    @media (max-width:900px){.painel{grid-template-columns:1fr}.side-card{order:-1}.topbar h1{letter-spacing:2px}.video-head{flex-direction:column;gap:8px}.controls button{flex:1}.quiz{padding:18px}.opt{font-size:18px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1>Las preposiciones y los adverbios de lugar</h1>
+    <p>Actividad interactiva con video — The Box / Simon's Cat</p>
+  </header>
+  <main class="wrap">
+    <section class="student video-card" style="padding:14px 16px">
+      <input id="nome" placeholder="Nombre del alumno" />
+      <input id="turma" placeholder="Clase / turma" />
+    </section>
+    <section class="painel">
+      <article class="video-card">
+        <div class="video-head"><span>🎬 Mira el video y responde</span><span class="badge" id="status">Pregunta 0/5</span></div>
+        <div class="video-box"><video id="video" src="video.mp4" controls preload="metadata"></video></div>
+        <div class="controls">
+          <button class="btn-primary" onclick="startActivity()">▶ Iniciar actividad</button>
+          <button class="btn-soft" onclick="restartActivity()">↻ Reiniciar</button>
+          <button class="btn-dark" onclick="toggleFull()">⛶ Pantalla completa</button>
+        </div>
+      </article>
+      <aside class="side-card">
+        <h2>Ejercicios</h2>
+        <div class="bar"><span id="bar"></span></div>
+        <div class="meta"><div>✅ Aciertos: <span id="score">0</span>/5</div><div>⚠️ Regla: si falla, vuelve al inicio.</div></div>
+        <!-- IMAGEM DO GATO RINDO: substitui as dicas da coluna direita -->
+        <div class="cat-laugh-box">
+          <img
+            src="orange-cat-laughing.gif"
+            alt="Gato rindo"
+            class="cat-laugh-img"
+          />
+          <p class="cat-laugh-text">😹 Cuidado: se errar, o gato ri e a atividade volta ao início!</p>
+        </div>
+        <div class="cert" id="cert">
+          <h2>🏆 Misión completada</h2>
+          <p><strong id="certNome">Alumno</strong> completó la actividad.</p>
+          <p>Aciertos: 5/5</p>
+          <button class="btn-primary" onclick="window.print()">Imprimir certificado</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+  <div class="modal" id="modal">
+    <div class="quiz">
+      <span class="question-count" id="qcount">Pregunta</span>
+      <h3 id="qtitle">¿Dónde está el gato?</h3>
+      <div class="opts" id="opts"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </div>
+  <p class="footer">Padrão Falange — atividade educacional interativa offline.</p>
+  <!-- ÁUDIO DA RISADA DO GATO: toca sempre que o aluno erra -->
+  <audio id="laughSound" preload="auto">
+    <source src="cat-laugh-gato-rindo.mp3" type="audio/mpeg">
+  </audio>
+<script>
+/* =========================================================
+   ATIVIDADE INTERATIVA — PREPOSICIONES Y ADVERBIOS DE LUGAR
+   Ajuste pontual solicitado:
+   1) Pergunta 1 em 0:19  → Está dentro de la caja
+   2) Pergunta 2 em 0:42  → Está detrás de la caja
+   3) Pergunta 3 em 0:45  → Está encima de la caja
+   4) Pergunta 4 em 1:16  → Está debajo de la caja
+   5) Pergunta 5 em 1:36  → Está alrededor de la caja
+   Regra mantida: se errar, toca a risada do gato e a atividade reinicia do começo.
+   Ajuste visual: a coluna direita não mostra mais dicas; mostra o GIF do gato rindo.
+   ========================================================= */
+
+/* =========================================================
+   1. CAPTURA DOS ELEMENTOS DA PÁGINA
+   ========================================================= */
+const video = document.getElementById('video');
+const modal = document.getElementById('modal');
+const opts = document.getElementById('opts');
+const feedback = document.getElementById('feedback');
+const scoreEl = document.getElementById('score');
+const statusEl = document.getElementById('status');
+const bar = document.getElementById('bar');
+const cert = document.getElementById('cert');
+const certNome = document.getElementById('certNome');
+const laughSound = document.getElementById('laughSound');
+
+/* =========================================================
+   2. BANCO DE PERGUNTAS
+   IMPORTANTE:
+   - O tempo está em segundos.
+   - 0:19 = 19 segundos | 0:42 = 42 segundos
+   - 1:16 = 76 segundos | 1:36 = 96 segundos
+   - Para ajustar depois, altere apenas o campo time.
+   ========================================================= */
+const questions = [
+  {
+    time: 19,
+    title: '¿Dónde está el gato?',
+    answer: 'Está dentro de la caja',
+    options: [
+      'Está dentro de la caja',
+      'Está detrás de la caja',
+      'Está encima de la caja'
+    ]
+  },
+  {
+    time: 42,
+    title: '¿Dónde está el gato?',
+    answer: 'Está detrás de la caja',
+    options: [
+      'Está delante de la caja',
+      'Está detrás de la caja',
+      'Está debajo de la caja'
+    ]
+  },
+  {
+    time: 45,
+    title: '¿Dónde está el gato?',
+    answer: 'Está encima de la caja',
+    options: [
+      'Está encima de la caja',
+      'Está dentro de la caja',
+      'Está alrededor de la caja'
+    ]
+  },
+  {
+    time: 76,
+    title: '¿Dónde está el gato?',
+    answer: 'Está debajo de la caja',
+    options: [
+      'Está al lado de la caja',
+      'Está debajo de la caja',
+      'Está encima de la caja'
+    ]
+  },
+  {
+    time: 96,
+    title: '¿Dónde está el gato?',
+    answer: 'Está alrededor de la caja',
+    options: [
+      'Está alrededor de la caja',
+      'Está dentro de la caja',
+      'Está detrás de la caja'
+    ]
+  }
+];
+
+/* =========================================================
+   3. VARIÁVEIS DE CONTROLE
+   ========================================================= */
+let current = 0;       // pergunta atual
+let score = 0;         // quantidade de acertos
+let running = false;   // atividade em andamento
+let waiting = false;   // modal aberto aguardando resposta
+
+/* =========================================================
+   4. ATUALIZA PLACAR, STATUS E BARRA DE PROGRESSO
+   ========================================================= */
+function updateUI(){
+  scoreEl.textContent = score;
+  statusEl.textContent = `Pregunta ${score}/${questions.length}`;
+  bar.style.width = (score / questions.length * 100) + '%';
+}
+
+/* =========================================================
+   5. INICIA A ATIVIDADE DO ZERO
+   ========================================================= */
+function startActivity(){
+  cert.style.display = 'none';
+  current = 0;
+  score = 0;
+  running = true;
+  waiting = false;
+  modal.classList.remove('show');
+  feedback.className = 'feedback';
+  feedback.textContent = '';
+  video.currentTime = 0;
+  updateUI();
+  video.play();
+}
+
+/* =========================================================
+   6. REINICIA A ATIVIDADE
+   ========================================================= */
+function restartActivity(){
+  modal.classList.remove('show');
+  feedback.className = 'feedback';
+  feedback.textContent = '';
+  startActivity();
+}
+
+/* =========================================================
+   7. PAUSA O VÍDEO E MOSTRA A PERGUNTA
+   ========================================================= */
+function showQuestion(){
+  waiting = true;
+  video.pause();
+
+  const q = questions[current];
+  document.getElementById('qcount').textContent = `Pregunta ${current + 1} de ${questions.length}`;
+  document.getElementById('qtitle').textContent = q.title;
+
+  feedback.className = 'feedback';
+  feedback.textContent = '';
+  opts.innerHTML = '';
+
+  q.options.forEach(text => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = text;
+    b.onclick = () => answer(text);
+    opts.appendChild(b);
+  });
+
+  modal.classList.add('show');
+}
+
+/* =========================================================
+   8. CONFERE A RESPOSTA DO ALUNO
+   - Se acertar: avança para a próxima pergunta.
+   - Se errar: volta tudo para o início.
+   ========================================================= */
+function answer(text){
+  const q = questions[current];
+
+  if(text === q.answer){
+    feedback.className = 'feedback ok';
+    feedback.textContent = '¡Correcto! El video continuará.';
+
+    score++;
+    current++;
+    updateUI();
+
+    setTimeout(() => {
+      modal.classList.remove('show');
+      waiting = false;
+
+      if(current >= questions.length){
+        finishActivity();
+      } else {
+        video.play();
+      }
+    }, 900);
+  } else {
+    feedback.className = 'feedback bad';
+    feedback.textContent = '😹 ¡Incorrecto! El gato se está riendo de ti...';
+
+    // Toca a risada do gato sempre que o aluno errar.
+    // O try/catch evita travar a atividade caso algum navegador bloqueie o áudio.
+    try {
+      laughSound.currentTime = 0;
+      laughSound.play();
+    } catch (error) {
+      console.log('Áudio da risada não pôde ser reproduzido automaticamente:', error);
+    }
+
+    // Aguarda a risada aparecer/tocar antes de reiniciar tudo.
+    setTimeout(restartActivity, 2500);
+  }
+}
+
+/* =========================================================
+   9. FINALIZA A ATIVIDADE E LIBERA CERTIFICADO
+   ========================================================= */
+function finishActivity(){
+  running = false;
+  video.play();
+
+  const nome = document.getElementById('nome').value.trim() || 'Alumno';
+  certNome.textContent = nome;
+  cert.style.display = 'block';
+  statusEl.textContent = `Concluido ${questions.length}/${questions.length}`;
+}
+
+/* =========================================================
+   10. MONITORAMENTO DO TEMPO DO VÍDEO
+   Quando o vídeo chega ao tempo da pergunta atual, ele pausa
+   e abre a caixa de pergunta.
+   ========================================================= */
+video.addEventListener('timeupdate', () => {
+  if(!running || waiting || current >= questions.length) return;
+
+  if(video.currentTime >= questions[current].time){
+    showQuestion();
+  }
+});
+
+/* =========================================================
+   11. SE O VÍDEO TERMINAR APÓS TODAS AS RESPOSTAS, MANTÉM CERTIFICADO
+   ========================================================= */
+video.addEventListener('ended', () => {
+  if(score >= questions.length){
+    cert.style.display = 'block';
+  }
+});
+
+/* =========================================================
+   12. BOTÃO DE TELA CHEIA
+   ========================================================= */
+function toggleFull(){
+  const el = document.querySelector('.video-card');
+  if(!document.fullscreenElement){
+    el.requestFullscreen?.();
+  } else {
+    document.exitFullscreen?.();
+  }
+}
+
+// Estado inicial do placar.
+updateUI();
+</script>
+</body>
+</html>

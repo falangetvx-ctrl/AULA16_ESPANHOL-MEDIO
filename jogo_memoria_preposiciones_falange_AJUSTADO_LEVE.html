@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogo da Memória Falange - Preposiciones</title>
+<style>
+:root{--roxo:#6f3bb2;--rosa:#f725a8;--verde:#007a55;--amarelo:#fff200;--escuro:#171326;}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at top,#9b5de5,#4b247c 48%,#150d25);color:#fff;min-height:100vh}
+.app{width:min(1180px,96vw);margin:auto;padding:16px 0 24px}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:14px 16px;box-shadow:0 16px 35px rgba(0,0,0,.25)}
+.logo{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,var(--amarelo),var(--rosa),#9b5de5);display:grid;place-items:center;color:#21123b;font-weight:900;font-size:28px;box-shadow:0 7px 0 rgba(0,0,0,.25)}
+.brand{display:flex;gap:14px;align-items:center}h1{margin:0;font-size:clamp(1.15rem,3vw,2rem);line-height:1.05}.sub{margin:4px 0 0;font-weight:700;color:#f4eaff}
+.panel{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.pill{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:8px 12px;font-weight:900;white-space:nowrap}
+.controls{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:14px 0}.group{display:flex;gap:8px;flex-wrap:wrap}input{border:2px solid rgba(255,255,255,.45);border-radius:14px;padding:12px 14px;background:#fff;font-weight:800;color:#222;min-width:210px}
+button{border:0;border-radius:15px;padding:12px 16px;font-weight:900;color:#fff;background:linear-gradient(135deg,#00a86b,#006b55);box-shadow:0 7px 0 rgba(0,0,0,.25);cursor:pointer}button:active{transform:translateY(3px);box-shadow:0 4px 0 rgba(0,0,0,.25)}.danger{background:linear-gradient(135deg,#ff2e8a,#9b1d6d)}
+.info{background:#fff;color:#2a2440;border-radius:18px;padding:12px 14px;margin-bottom:14px;text-align:center;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.board{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.card{aspect-ratio:1/1;border:3px solid rgba(255,255,255,.75);border-radius:18px;background:#fff;overflow:hidden;position:relative;cursor:pointer;box-shadow:0 10px 22px rgba(0,0,0,.25)}.card:hover{transform:scale(1.02)}
+.face{position:absolute;inset:0;display:grid;place-items:center}.front{background:linear-gradient(135deg,#5a22a6,var(--rosa));z-index:2}.mark{width:64%;height:64%;border-radius:18px;background:rgba(255,255,255,.16);display:grid;place-items:center;font-size:clamp(2rem,6vw,4.4rem);font-weight:900;text-shadow:0 5px 0 rgba(0,0,0,.18)}
+.back{z-index:1;background:#fff}.back img{width:100%;height:100%;object-fit:cover;display:block}.flipped .front,.matched .front{display:none}.matched{border-color:var(--amarelo);box-shadow:0 0 0 4px rgba(255,242,0,.55),0 10px 26px rgba(0,0,0,.25);cursor:default}.locked{pointer-events:none}
+.modal{position:fixed;inset:0;background:rgba(10,7,20,.78);display:none;align-items:center;justify-content:center;z-index:10;padding:18px}.modal.show{display:flex}.box{width:min(620px,94vw);background:#fff;color:#242038;border-radius:26px;padding:24px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.4)}.box h2{margin:0;color:var(--roxo);font-size:clamp(1.5rem,5vw,2.5rem)}.cert{border:4px dashed #9b5de5;border-radius:20px;background:#fffdf5;padding:18px;margin:14px 0}.cert strong{display:block;margin:8px 0;font-size:1.35rem;color:#111}
+@media(max-width:900px){.top{display:block}.panel{justify-content:flex-start;margin-top:10px}.board{grid-template-columns:repeat(5,1fr);gap:8px}}
+@media(max-width:620px){.app{width:98vw;padding-top:8px}.board{grid-template-columns:repeat(4,1fr);gap:6px}.card{border-radius:12px;border-width:2px}input{width:100%;min-width:100%}button{flex:1}.group{width:100%}}
+@media(max-width:380px){.board{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top"><div class="brand"><div class="logo">F</div><div><h1>Jogo da Memória Falange Premium</h1><p class="sub">Preposiciones de lugar: encontre o par correto entre imagem e texto.</p></div></div><div class="panel"><div class="pill">⏱️ <span id="time">00:00</span></div><div class="pill">🎯 Pares: <span id="pairs">0</span>/15</div><div class="pill">🔁 Tentativas: <span id="moves">0</span></div></div></header>
+  <section class="controls"><div class="group"><input id="nome" placeholder="Nome do aluno"><input id="turma" placeholder="Turma"></div><div class="group"><button id="startBtn">COMEÇAR / EMBARALHAR</button><button class="danger" id="resetBtn">REINICIAR</button></div></section>
+  <div class="info">Toque em duas cartas. O par certo é uma imagem + a carta de texto correspondente.</div>
+  <main class="board" id="board"></main>
+</div>
+<div class="modal" id="winModal"><div class="box"><h2>🏆 Atividade concluída!</h2><p>Você encontrou todos os pares das preposições de lugar.</p><div class="cert"><span>Certificado Falange Premium</span><strong id="certName">Aluno(a)</strong><span id="certText"></span></div><button onclick="window.print()">IMPRIMIR CERTIFICADO</button> <button class="danger" onclick="winModal.classList.remove('show')">FECHAR</button></div></div>
+<script>
+const PARES = [
+      {id:'ahi', nome:'ahí', imagem:'img_memoria_preposiciones/ahi_imagem.jpg', texto:'img_memoria_preposiciones/ahi_texto.jpg'},
+      {id:'allialla', nome:'allí / allá', imagem:'img_memoria_preposiciones/allialla_imagem.jpg', texto:'img_memoria_preposiciones/allialla_texto.jpg'},
+      {id:'aquiaca', nome:'aquí / acá', imagem:'img_memoria_preposiciones/aquiaca_imagem.jpg', texto:'img_memoria_preposiciones/aquiaca_texto.jpg'},
+      {id:'aladerecha', nome:'a la derecha de', imagem:'img_memoria_preposiciones/aladerecha_imagem.jpg', texto:'img_memoria_preposiciones/aladerecha_texto.jpg'},
+      {id:'alaizquierda', nome:'a la izquierda de', imagem:'img_memoria_preposiciones/alaizquierda_imagem.jpg', texto:'img_memoria_preposiciones/alaizquierda_texto.jpg'},
+      {id:'alrededor', nome:'alrededor de', imagem:'img_memoria_preposiciones/alrededor_imagem.jpg', texto:'img_memoria_preposiciones/alrededor_texto.jpg'},
+      {id:'cerca', nome:'cerca', imagem:'img_memoria_preposiciones/cerca_imagem.jpg', texto:'img_memoria_preposiciones/cerca_texto.jpg'},
+      {id:'debajo', nome:'debajo de / bajo', imagem:'img_memoria_preposiciones/debajo_imagem.jpg', texto:'img_memoria_preposiciones/debajo_texto.jpg'},
+      {id:'delante', nome:'delante de / enfrente de', imagem:'img_memoria_preposiciones/delante_imagem.jpg', texto:'img_memoria_preposiciones/delante_texto.jpg'},
+      {id:'dentro', nome:'dentro de / en', imagem:'img_memoria_preposiciones/dentro_imagem.jpg', texto:'img_memoria_preposiciones/dentro_texto.jpg'},
+      {id:'detras', nome:'detrás de', imagem:'img_memoria_preposiciones/detras_imagem.jpg', texto:'img_memoria_preposiciones/detras_texto.jpg'},
+      {id:'encima', nome:'encima de / sobre / en', imagem:'img_memoria_preposiciones/encima_imagem.jpg', texto:'img_memoria_preposiciones/encima_texto.jpg'},
+      {id:'entre', nome:'entre / en medio de', imagem:'img_memoria_preposiciones/entre_imagem.jpg', texto:'img_memoria_preposiciones/entre_texto.jpg'},
+      {id:'fuera', nome:'fuera de', imagem:'img_memoria_preposiciones/fuera_imagem.jpg', texto:'img_memoria_preposiciones/fuera_texto.jpg'},
+      {id:'junto', nome:'junto a / al lado de', imagem:'img_memoria_preposiciones/junto_imagem.jpg', texto:'img_memoria_preposiciones/junto_texto.jpg'}
+];
+let cartas=[], abertas=[], pares=0, movimentos=0, segundos=0, timer=null;
+const board=document.getElementById('board'), elPairs=document.getElementById('pairs'), elMoves=document.getElementById('moves'), elTime=document.getElementById('time'), winModal=document.getElementById('winModal');
+const embaralhar=a=>a.sort(()=>Math.random()-.5);
+const tempo=()=>{segundos++;let m=String(Math.floor(segundos/60)).padStart(2,'0'),s=String(segundos%60).padStart(2,'0');elTime.textContent=m+':'+s};
+function iniciar(){
+  clearInterval(timer); timer=setInterval(tempo,1000); segundos=pares=movimentos=0; abertas=[]; elTime.textContent='00:00'; elPairs.textContent=0; elMoves.textContent=0; winModal.classList.remove('show');
+  cartas=embaralhar(PARES.flatMap(p=>[{id:p.id, tipo:'imagem', src:p.imagem},{id:p.id, tipo:'texto', src:p.texto}]));
+  board.innerHTML=''; cartas.forEach((c,i)=>{
+    const card=document.createElement('button'); card.className='card'; card.type='button'; card.dataset.id=c.id; card.dataset.i=i; card.innerHTML=`<div class="face front"><div class="mark">?</div></div><div class="face back"><img src="${c.src}" alt="${c.id}"></div>`;
+    card.onclick=()=>virar(card); board.appendChild(card);
+  });
+}
+function virar(card){
+  if(card.classList.contains('flipped')||card.classList.contains('matched')||abertas.length===2)return;
+  card.classList.add('flipped'); abertas.push(card);
+  if(abertas.length===2)conferir();
+}
+function conferir(){
+  movimentos++; elMoves.textContent=movimentos;
+  const [a,b]=abertas, certo=a.dataset.id===b.dataset.id && a.dataset.i!==b.dataset.i;
+  document.querySelectorAll('.card').forEach(c=>c.classList.add('locked'));
+  setTimeout(()=>{
+    if(certo){a.classList.add('matched');b.classList.add('matched');pares++;elPairs.textContent=pares;}
+    else {a.classList.remove('flipped');b.classList.remove('flipped');}
+    abertas=[]; document.querySelectorAll('.card:not(.matched)').forEach(c=>c.classList.remove('locked'));
+    if(pares===PARES.length)finalizar();
+  }, certo?400:850);
+}
+function finalizar(){
+  clearInterval(timer);
+  const nome=document.getElementById('nome').value.trim()||'Aluno(a)', turma=document.getElementById('turma').value.trim();
+  document.getElementById('certName').textContent=nome;
+  document.getElementById('certText').textContent=`concluiu o jogo em ${elTime.textContent}, com ${movimentos} tentativas${turma?' - Turma: '+turma:''}.`;
+  winModal.classList.add('show');
+}
+document.getElementById('startBtn').onclick=iniciar; document.getElementById('resetBtn').onclick=iniciar; iniciar();
+</script>
+</body>
+</html>
