@@ -694,35 +694,9 @@ img, video, canvas, svg{
 }
 </style>
 
-<style id="ajuste-botao-certificado-professor">
-#btnLiberarCertificadoProfessor{
-  position:fixed;
-  right:14px;
-  bottom:14px;
-  z-index:15000;
-  border:0;
-  border-radius:14px;
-  padding:12px 16px;
-  background:#8e44ad;
-  color:#fff;
-  font-family:'Quicksand',Arial,sans-serif;
-  font-weight:900;
-  font-size:15px;
-  cursor:pointer;
-  box-shadow:0 8px 22px rgba(0,0,0,.28);
-}
-@media(max-width:600px){
-  #btnLiberarCertificadoProfessor{right:10px;bottom:10px;padding:11px 13px;font-size:13px;}
-}
-@media print{
-  #btnLiberarCertificadoProfessor{display:none!important;}
-}
-</style>
-
 </head>
 <body>
 
-<button id="btnLiberarCertificadoProfessor" type="button" onclick="liberarCertificadoFalange(true)">🔐 Liberar certificado</button>
 <div class="overlay" id="startOverlay">
   <div class="modal">
     <h2>Registro do aluno</h2>
@@ -1221,6 +1195,7 @@ const FALANGE_LABELS = {
 const falangeProgress = {p2:false,p3:false,p4:false,p5:false};
 let falangeStudent = {name:'', klass:'', school:''};
 let falangeCertified = false;
+let falangeEnemCompleted = false;
 
 function getStudentFalange(){
   falangeStudent = {
@@ -1286,6 +1261,7 @@ function resetToStartFalange(){
   // Reinicia progresso e volta para o registro inicial.
   FALANGE_REQUIRED.forEach(p => falangeProgress[p] = false);
   falangeCertified = false;
+  falangeEnemCompleted = false;
   updateFalangeLock();
 
   const wrap = document.querySelector('.wrap');
@@ -1320,8 +1296,8 @@ async function shaFalange(text){
   }
 }
 
-async function liberarCertificadoFalange(forcarProfessor = false){
-  if(!forcarProfessor && !allFalangePreviousDone()){
+async function liberarCertificadoFalange(){
+  if(!allFalangePreviousDone() || !falangeEnemCompleted){
     updateFalangeLock();
     document.querySelector('.enem-page')?.scrollIntoView({behavior:'smooth'});
     alert('A Página 6 só libera certificado após concluir todas as atividades anteriores.');
@@ -1331,13 +1307,6 @@ async function liberarCertificadoFalange(forcarProfessor = false){
   if(window.__falangeCertAuthInProgress) return;
   window.__falangeCertAuthInProgress = true;
 
-  const codigoDigitado = prompt('Digite o código do professor para liberar o certificado:');
-  const codigoProfessor = String.fromCharCode(104,225,32,114,97,122,227,111,32,112,111,114,99,111,32,104,225,32,114,97,122,227,111);
-  if(codigoDigitado === null || codigoDigitado.trim() !== codigoProfessor){
-    alert('Código do professor inválido. O certificado permanece bloqueado.');
-    setTimeout(() => { window.__falangeCertAuthInProgress = false; }, 0);
-    return;
-  }
   falangeCertified = true;
   const st = getStudentFalange();
   const now = new Date();
@@ -1373,6 +1342,7 @@ window.addEventListener('message', ev => {
     resetToStartFalange();
   }
   if(data.type === 'falangeEnemCorrect'){
+    falangeEnemCompleted = true;
     liberarCertificadoFalange();
   }
 });
@@ -2512,6 +2482,7 @@ const FALANGE_LABELS = {
 const falangeProgress = {p2:false,p3:false,p4:false,p5:false};
 let falangeStudent = {name:'', klass:'', school:''};
 let falangeCertified = false;
+let falangeEnemCompleted = false;
 
 function getStudentFalange(){
   falangeStudent = {
@@ -2553,6 +2524,7 @@ function scrollToFirstPending(){
 function resetToStartFalange(){
   FALANGE_REQUIRED.forEach(p => falangeProgress[p] = false);
   falangeCertified = false;
+  falangeEnemCompleted = false;
   updateFalangeLock();
   const wrap = document.querySelector('.wrap');
   const overlay = document.getElementById('startOverlay');
@@ -2568,8 +2540,8 @@ async function shaFalange(text){
   try{ const enc = new TextEncoder().encode(text); const buf = await crypto.subtle.digest('SHA-256', enc); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('').toUpperCase(); }
   catch(e){ let h=0; for(let i=0;i<text.length;i++) h = Math.imul(31,h) + text.charCodeAt(i) | 0; return Math.abs(h).toString(16).toUpperCase().padStart(8,'0'); }
 }
-async function liberarCertificadoFalange(forcarProfessor = false){
-  if(!forcarProfessor && !allFalangePreviousDone()){
+async function liberarCertificadoFalange(){
+  if(!allFalangePreviousDone() || !falangeEnemCompleted){
     updateFalangeLock();
     document.querySelector('.enem-page')?.scrollIntoView({behavior:'smooth'});
     alert('A Página 6 só libera certificado após concluir todas as atividades anteriores.');
@@ -2579,13 +2551,6 @@ async function liberarCertificadoFalange(forcarProfessor = false){
   if(window.__falangeCertAuthInProgress) return;
   window.__falangeCertAuthInProgress = true;
 
-  const codigoDigitado = prompt('Digite o código do professor para liberar o certificado:');
-  const codigoProfessor = String.fromCharCode(104,225,32,114,97,122,227,111,32,112,111,114,99,111,32,104,225,32,114,97,122,227,111);
-  if(codigoDigitado === null || codigoDigitado.trim() !== codigoProfessor){
-    alert('Código do professor inválido. O certificado permanece bloqueado.');
-    setTimeout(() => { window.__falangeCertAuthInProgress = false; }, 0);
-    return;
-  }
   falangeCertified = true;
   const st = getStudentFalange();
   const stamp = new Date().toLocaleString('pt-BR');
@@ -2603,7 +2568,10 @@ window.addEventListener('message', ev => {
   const data = ev.data || {};
   if(data.type === 'falangeComplete') markFalangeComplete(data.page);
   if(data.type === 'falangeEnemWrong') resetToStartFalange();
-  if(data.type === 'falangeEnemCorrect') liberarCertificadoFalange();
+  if(data.type === 'falangeEnemCorrect'){
+    falangeEnemCompleted = true;
+    liberarCertificadoFalange();
+  }
 });
 const originalEnterLessonFalange2 = window.enterLesson;
 window.enterLesson = function(){
